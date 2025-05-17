@@ -181,7 +181,7 @@ number:
   - platform: template
     name: "TEST: Blower Manual Speed Setting" # Use only when fan component blower is 'off'
     id: blower_speed
-    min_value: 0.0
+    min_value: 0.10
     max_value: 0.98
     step: 0.01  # Adjust step for fine control
     unit_of_measurement: "PWM"
@@ -193,7 +193,7 @@ number:
   - platform: template
     name: "TEST: Blower Ramp Speed Setting" # Use when fan component blower is 'on'
     id: blower_speed2
-    min_value: 0.0
+    min_value: 0.10
     max_value: 0.98
     step: 0.01  # Adjust step for fine control
     unit_of_measurement: "PWM"
