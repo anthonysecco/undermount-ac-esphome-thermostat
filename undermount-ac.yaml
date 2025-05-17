@@ -1,11 +1,10 @@
 #### This is test code ####
+# 1-step-sweep
 
 # Instructions
 # Set Blower to 'on'
-# Set speed to '15' to start the blower
-# Set speed to '1' to run at minimum speed
 # Wait until blower settles
-# Set blower to '0.98'
+# Set blower to '0.98' using ramp slider (not manual)
 # Blower will ramp to 98% over 98 seconds at 1s intervals and 1% each interval
 # Listen closely to see if speed changes occur evenly every 1s throughout the range or whather uneveness is heard as it progresses.
 
@@ -32,10 +31,12 @@ globals:
   # Blower Ramp Globals
   - id: current_blower_speed
     type: float
-    restore_value: yes
+    restore_value: no
+    initial_value: '10.0'
   - id: target_blower_speed
     type: float
-    restore_value: yes
+    restore_value: no
+    initial_value: '10.0'
   - id: ramp_blower
     type: bool
     restore_value: no
@@ -47,8 +48,8 @@ esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
   project:
-    name: anthonysecco.undermount-ac-esphome-thermostat
-    version: "0.2.0-beta"
+    name: anthonysecco.undermount-ac-esphome-thermostat-1-step-sweep
+    version: "0.2.0-test"
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -171,7 +172,7 @@ fan:
     name: "Blower"
     output: blower_pwm
     id: blower_fan
-    disabled_by_default: true
+    restore_mode: ALWAYS_OFF
     on_turn_off:
       - lambda: id(blower_speed_called).publish_state(id(blower_fan).speed);
     on_speed_set:
