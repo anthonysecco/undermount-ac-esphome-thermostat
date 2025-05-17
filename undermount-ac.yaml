@@ -1,6 +1,16 @@
-## Written by https://github.com/anthonysecco
-# Special thanks to Mike Goubeaux (Smarty Van)
-# To be used with Undermount AC ESP Home Thermostat and Undermount AC System
+#### This is test code ####
+# 1-step-sweep
+
+# Instructions
+# Set Blower to 'on'
+# Set speed to '15' to start the blower
+# Set speed to '1' to run at minimum speed
+# Wait until blower settles
+# Set blower to '0.98'
+# Blower will ramp to 98% over 98 seconds at 4s intervals and 4% each interval (only viewable in logs see duty cycle
+# Listen closely to see if speed changes occur evenly every 1s throughout the range or whather uneveness is heard as it progresses.
+
+###########################
 
 # Connector Matrix:
 # Output 1 - Blower Speed (White Wire)
@@ -24,11 +34,11 @@ globals:
   - id: current_blower_speed
     type: float
     restore_value: no
-    initial_value: '0.0'
+    initial_value: '10.0'
   - id: target_blower_speed
     type: float
     restore_value: no
-    initial_value: '0.0'
+    initial_value: '10.0'
   - id: ramp_blower
     type: bool
     restore_value: no
@@ -40,8 +50,8 @@ esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
   project:
-    name: anthonysecco.undermount-ac-esphome-thermostat
-    version: "0.2.0-beta"
+    name: anthonysecco.undermount-ac-esphome-thermostat-4-step-sweep
+    version: "0.2.0-test"
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -195,7 +205,7 @@ fan:
     name: "Blower"
     output: blower_pwm_filter
     id: blower_fan
-    disabled_by_default: true
+    restore_mode: ALWAYS_OFF
 
 number:      
   - platform: template
