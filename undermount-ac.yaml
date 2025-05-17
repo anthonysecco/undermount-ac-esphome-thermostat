@@ -1,15 +1,6 @@
-#### This is test code ####
-
-# Instructions
-# Set Blower to 'on'
-# Set speed to '15' to start the blower
-# Set speed to '1' to run at minimum speed
-# Wait until blower settles
-# Set blower to '0.98'
-# Blower will ramp to 98% over 98 seconds at 1s intervals and 1% each interval
-# Listen closely to see if speed changes occur evenly every 1s throughout the range or whather uneveness is heard as it progresses.
-
-###########################
+## Written by https://github.com/anthonysecco
+# Special thanks to Mike Goubeaux (Smarty Van)
+# To be used with Undermount AC ESP Home Thermostat and Undermount AC System
 
 # Connector Matrix:
 # Output 1 - Blower Speed (White Wire)
@@ -32,10 +23,12 @@ globals:
   # Blower Ramp Globals
   - id: current_blower_speed
     type: float
-    restore_value: yes
+    restore_value: no
+    initial_value: '0.0'
   - id: target_blower_speed
     type: float
-    restore_value: yes
+    restore_value: no
+    initial_value: '0.0'
   - id: ramp_blower
     type: bool
     restore_value: no
@@ -160,6 +153,37 @@ output:
     max_power: 1.00     # Max duty cycle per Undermount AC
     zero_means_zero: true
 
+  - platform: template
+    id: blower_pwm_filter
+    type: float
+    write_action:
+      - lambda: |-
+          // My testing indicates the blower has stair step transfer function.  These are reliable steps I've found.
+          const float duty_cycles[25] = {
+              0.01, 0.04, 0.08, 0.12,
+              0.16, 0.20, 0.24, 0.28, 0.32,
+              0.36, 0.40, 0.44, 0.48, 0.52,
+              0.56, 0.60, 0.64, 0.68, 0.72,
+              0.76, 0.80, 0.84, 0.88, 0.92, 0.96
+          };
+
+          // Calculate the speed index correctly
+          int speed_index;
+          if (state <= 0.0) {
+              speed_index = 0;  // Map zero to the first element (0.01)
+          } else {
+              // Correctly calculate the speed index, using floor to avoid rounding issues
+              speed_index = floor(state * 24);  // Multiplied by (25 - 1) to scale correctly
+              speed_index = fmax(0, fmin(24, speed_index));  // Clamp to range 0-24
+          }
+
+          // Get the duty cycle from the pre-defined array
+          float duty_cycle = duty_cycles[speed_index];
+
+          id(blower_pwm).set_level(duty_cycle);
+          ESP_LOGI("Blower PWM Filter", "State: %.2f, Speed Index: %d, Duty Cycle: %.2f", state, speed_index, duty_cycle);
+          id(blower_speed_called).publish_state(duty_cycle * 100);
+
 power_supply: 
   - id: blower_power # Output 2 
     pin: 
@@ -169,13 +193,9 @@ power_supply:
 fan:
   - platform: speed
     name: "Blower"
-    output: blower_pwm
+    output: blower_pwm_filter
     id: blower_fan
     disabled_by_default: true
-    on_turn_off:
-      - lambda: id(blower_speed_called).publish_state(id(blower_fan).speed);
-    on_speed_set:
-      - lambda: id(blower_speed_called).publish_state(id(blower_fan).speed);
 
 number:      
   - platform: template
