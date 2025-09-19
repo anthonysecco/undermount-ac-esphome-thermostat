@@ -54,8 +54,6 @@ Use the "Install Firmware" link below to install the **pre-built firmware** dire
   manifest="esphome-undermount-ac.manifest.json">
 </esp-web-install-button>
 
-<esp-web-install-button manifest="firmware/anthonysecco.undermount-ac-esphome-thermostat.manifest.json"></esp-web-install-button>
-
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 
 ## Install Undermount AC Thermostat
