@@ -141,6 +141,10 @@ To contribute:
 4. Push to the branch: `git push origin feature-name`
 5. Submit a pull request.
 
+# AI Disclosure
+
+This project was built largely with AI coding tools (Claude). I directed the design and reviewed the changes, but most of the code and documentation was written by AI. Please review the code before relying on it, and open an issue if you find a problem.
+
 # License
 
 This project is licensed under the MIT License.
