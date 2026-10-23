@@ -1,5 +1,7 @@
 # Description
 
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://www.buymeacoffee.com/anthonysecco)
+
 The purpose of this project is to utilize the ESPHome Undermount AC thermostat with the Undermount AC V3 system for integration with Home Assistant.
 
 The design goals for this project are:
@@ -128,6 +130,10 @@ Compressor lockout status can't be directly detected. However, if the compressor
 Please open an issue for bugs, feature requests, or general questions. Thanks!
 
 ⭐ Star this project if you found it helpful.
+
+## 💖 Support
+
+If you found this project useful, consider [buying me a coffee](https://www.buymeacoffee.com/anthonysecco). ☕
 
 ## Contribution
 
